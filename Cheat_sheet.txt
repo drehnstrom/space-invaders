@@ -1,5 +1,5 @@
 # Build Docker image
-gcloud builds submit --tag=gcr.io/main-cedar-292411/space-invaders:v1.0 .
+gcloud builds submit --tag=gcr.io/<project-id>/space-invaders:v1.0 .
 
 
 # Create Deployment config file
@@ -7,7 +7,7 @@ kubectl create deployment space-inv --image=gcr.io/<project-id>/space-invaders:v
 
 
 # Create Service config file
-kubectl expose deployments/space-inv --port=80 --target-port=80 --type=LoadBalancer --dry-run=client -o=YAML
+kubectl expose deployments/space-inv --port=80 --target-port=80 --type=LoadBalancer --dry-run=client -o=YAML >> kubernetes-service.yaml
 
 
 # Enable Istio sidecar proxy

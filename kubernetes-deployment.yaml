@@ -18,7 +18,7 @@ spec:
         app: space-inv
     spec:
       containers:
-      - image: gcr.io/main-cedar-292411/space-invaders:v1.0
+      - image: drehnstrom/space-invaders:latest
         name: space-invaders
         resources: {}
 status: {}
