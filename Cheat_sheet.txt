@@ -17,3 +17,14 @@ kubectl label namespace default istio-injection=enabled
 
 # Deploy to kubernetes
 kubectl apply -f <filename.yaml>
+
+# Delete from Kubernetes
+kubectl delete -f <filename.yaml>
+
+## Kubernetes commands
+kubectl get pods
+kubectl get services
+
+# Log into a pod
+kubectl exec -it <pod id> -- /bin/bash
+
