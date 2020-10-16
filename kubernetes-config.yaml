@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: space-inv
+  name: space-inv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: space-inv
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: space-inv
+    spec:
+      containers:
+      - image: gcr.io/main-cedar-292411/space-invaders:v1.0
+        name: space-invaders
+        resources: {}
+status: {}
