@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: space-inv
-  name: space-inv
+    app: space-inv-v2
+  name: space-inv-v2
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: space-inv
+      app: space-inv-v2
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: space-inv
+        app: space-inv-v2
     spec:
       containers:
-      - image: drehnstrom/space-invaders:v1.0
+      - image: drehnstrom/space-invaders:v2.0
         name: space-invaders
         resources: {}
 status: {}
