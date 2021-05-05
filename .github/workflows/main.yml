@@ -37,12 +37,4 @@ jobs:
           echo Below are the files:
           ls -a 
           
-          
-      - uses: actions/gcloud/auth@master
-        env:
-          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
- 
-      - uses: actions/gcloud/cli@master
-        with:
-          args: "config list --project=APP_ENGINE_PROJECT_NAME"
-          #args: "app deploy --quiet --project=APP_ENGINE_PROJECT_NAME"
+        
