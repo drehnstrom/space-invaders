@@ -1,6 +1,8 @@
 # space-invaders
 
-This is a demo app that uses a simple Angular JS website. 
+This is a demo app that uses a simple Angular JS website. It can be deployed anywhere (virtual machines, App Engine, Cloud Run, Kubernetes, etc. )
+
+We use this application in a number of training classes to demo things like Cloud Deployments and CI/CD pipelines. 
 
 ## Docker
 The Dockerfile is configured to copy the App into a Docker Image with Nginx installed. 
