@@ -67,7 +67,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.4.0
         with:
-          credentials: ${{ secrets.GCLOUD_AUTH }}
+          # credentials: ${{ secrets.GCLOUD_AUTH }}
           service: ${{ env.SERVICE }}
           image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
           region: ${{ env.REGION }}
