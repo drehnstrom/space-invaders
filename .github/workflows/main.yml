@@ -9,9 +9,14 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  SERVICE: space-invaders-github-action
+  REGION: us-central1
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -40,12 +45,19 @@ jobs:
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          project_id: ${{ secrets.APP_ENGINE_PROJECT_NAME }}
+          project_id: ${{ secrets.GCP_PROJECT }}
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
 
       - name: Run a Gcloud Command
         run: gcloud config list
 
-        
       - name: Deploy to App Engine
         run: gcloud app deploy app-si-service.yaml --quiet --version v1        
+
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
+        
+      - name: Build and Push Container
+        run: |-
+          docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
+          docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
