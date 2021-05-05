@@ -1,6 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+# This workflow Deploys to Google App Engine and Cloud Run
 
-name: CI
+name: Deploy to App Engine and Cloud Run
 
 # Controls when the action will run. 
 on:
@@ -14,7 +14,7 @@ on:
     
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  SERVICE: space-invaders-github-action
+  SERVICE: space-invaders-github-action # This is the name of the Cloud Run Service
   REGION: us-central1
 
 
@@ -30,11 +30,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      # Just see if the job does anything
       - name: Say Hello
         run: echo Hello Space Invaders Fans!
 
-      # Runs a set of commands using the runners shell
+      # Output the gcloud version and the reppo files
       - name: Print Info
         run: |
           echo Gcloud Version
@@ -49,11 +49,11 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
 
-      - name: Run a Gcloud Command
+      - name: Run a gcloud Command
         run: gcloud config list
 
-      #- name: Deploy to App Engine
-      #  run: gcloud app deploy app-si-service.yaml --quiet --version v1        
+      - name: Deploy to App Engine
+        run: gcloud app deploy app-si-service.yaml --quiet --version v1        
 
       - name: Authorize Docker push
         run: gcloud auth configure-docker
@@ -74,4 +74,3 @@ jobs:
   
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-          
