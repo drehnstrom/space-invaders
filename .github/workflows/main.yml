@@ -43,7 +43,9 @@ jobs:
           project_id: ${{ secrets.APP_ENGINE_PROJECT_NAME }}
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
 
-      - name: Run a Gcloud Command #Deploy to App Engine
+      - name: Run a Gcloud Command
         run: gcloud config list
-        #run: gcloud app deploy app.yaml --quiet --no-promote --version v1
+
         
+      - name: Deploy to App Engine
+        run: gcloud app deploy app-si-service.yaml --quiet --version v1        
