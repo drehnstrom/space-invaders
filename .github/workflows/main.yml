@@ -27,10 +27,22 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: echo Hello Space Invaders Fans!
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo Gcloud Version
+          gcloud --version
+          echo Below are the files:
+          ls -a 
+          
+          
+      - uses: actions/gcloud/auth@master
+        env:
+          GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+ 
+      - uses: actions/gcloud/cli@master
+        with:
+          args: "config list --project=APP_ENGINE_PROJECT_NAME"
+          #args: "app deploy --quiet --project=APP_ENGINE_PROJECT_NAME"
