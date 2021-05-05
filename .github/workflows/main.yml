@@ -51,8 +51,8 @@ jobs:
       - name: Run a Gcloud Command
         run: gcloud config list
 
-      - name: Deploy to App Engine
-        run: gcloud app deploy app-si-service.yaml --quiet --version v1        
+      #- name: Deploy to App Engine
+      #  run: gcloud app deploy app-si-service.yaml --quiet --version v1        
 
       - name: Authorize Docker push
         run: gcloud auth configure-docker
