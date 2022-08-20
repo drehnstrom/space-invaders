@@ -1,0 +1,31 @@
+# Create a GKE cluster
+gcloud container clusters create small-cluster --zone=us-central1-a --num-nodes=2 --spot
+
+# Get the kubectl credentials
+gcloud container clusters get-credentials small-cluster --zone us-central1-a 
+
+# Use the istioctl CLI to install Istio with the demo profile
+# Note: istioctl is already installed in Cloud Shell
+istioctl install --set profile=demo
+
+# Enable Istio sidecar proxy in the default namespace
+kubectl label namespace default istio-injection=enabled
+
+# Deploy Space invaders versions 1 and 2
+kubectl apply -f space-invaders-v1.yaml
+kubectl apply -f space-invaders-v2.yaml
+
+# Deploy the Space Invaders service (ClusterIP)
+kubectl apply -f space-invaders-service.yaml
+
+
+# Deploy the Istio Gateway, Destination Rules and Virtual Service
+kubectl apply -f istio-gateway.yaml
+kubectl apply -f istio-destination-rules.yaml
+kubectl apply -f istio-virtual-service.yaml
+
+# Note: you can just deploy everything at the same time:
+kubectl apply -f ./
+
+
+

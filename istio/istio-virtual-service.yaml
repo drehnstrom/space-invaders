@@ -1,0 +1,38 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: space-invaders-virtual-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - space-invaders-gateway
+  http:
+  ####### Fault Injection 25% of Requests ##############
+  - fault:
+      abort:
+        httpStatus: 500
+        percentage:
+          value: 25
+    route:
+    - destination:
+        host: space-invaders-service
+   ####### End Fault Injection ##############
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        prefix: ""
+    route:
+    - destination:
+        host: space-invaders-service   # The Kubernetes service name
+        subset: v1                     # Subset defined in the Destination Rule
+        port:
+          number: 80
+      weight: 75                       # Canary example - Send 75% of the traffic to v1
+    - destination:
+        host: space-invaders-service   # The Kubernetes service name
+        subset: v2
+        port:
+          number: 80
+      weight: 25

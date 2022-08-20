@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: space-inv-istio
+  name: space-invaders-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: space-inv-istio
+  type: ClusterIP
+status:
+  loadBalancer: {}
