@@ -20,5 +20,11 @@ spec:
       containers:
       - image: drehnstrom/space-invaders:v1.0
         name: space-invaders
-        resources: {}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: ".1"
+          limits:
+            memory: "256Mi"
+            cpu: ".2"
 status: {}
