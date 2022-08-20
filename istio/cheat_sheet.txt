@@ -30,5 +30,10 @@ kubectl apply -f istio-peer-authentication.yaml
 # Note: you can just deploy everything at the same time:
 kubectl apply -f ./
 
+# Delete everything in the cluster
+kubectl delete -f ./
+
+# Delete the Cluster 
+gcloud container clusters delete small-cluster --zone=us-central1-a
 
 
