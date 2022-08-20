@@ -24,6 +24,9 @@ kubectl apply -f istio-gateway.yaml
 kubectl apply -f istio-destination-rules.yaml
 kubectl apply -f istio-virtual-service.yaml
 
+# Deploy the Istio Peer Authication rules
+kubectl apply -f istio-peer-authentication.yaml
+
 # Note: you can just deploy everything at the same time:
 kubectl apply -f ./
 
