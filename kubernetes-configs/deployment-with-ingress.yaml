@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: space-inv
+  name: space-inv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: space-inv
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: space-inv
+    spec:
+      containers:
+      - image: drehnstrom/space-invaders:v1.0
+        name: space-invaders
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: ".1"
+          limits:
+            memory: "256Mi"
+            cpu: ".2"
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: space-inv
+  name: space-inv-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: space-inv
+  type: NodePort
+status:
+  loadBalancer: {}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: space-inv-ingress
+spec:
+  defaultBackend:
+    service:
+      name: space-inv-service
+      port:
+        number: 80
+  rules:
+  - http:
+      paths:
+      - path: "/*"
+        backend:
+          service:
+            name: space-inv-service
+            port:
+              number: 80
+        pathType: ImplementationSpecific
