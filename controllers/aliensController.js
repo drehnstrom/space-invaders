@@ -54,7 +54,7 @@ angular.module('appname')
         top: 500,
         speed: 5,
         rotation: 0,
-        image: "bomb.svg",
+        image: "puppy.svg",
         exploding:false
       };
       
