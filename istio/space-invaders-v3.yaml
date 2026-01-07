@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: space-inv-istio-v2
+  name: space-inv-istio-v3
   labels:
     app: space-inv-istio
-    version: v2
+    version: v3
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: space-inv-istio
-      version: v2
+      version: v3
   template:
     metadata:
       labels:
         app: space-inv-istio
-        version: v2
+        version: v3
     spec:
       containers:
-      - name: space-invaders-2
-        image: drehnstrom/space-invaders:v2.0
+      - name: space-invaders-3
+        image: drehnstrom/space-invaders:v3.0

@@ -3,22 +3,28 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: space-inv
-  name: space-inv-canary
+    app: space-inv-v3
+  name: space-inv-v3
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: space-inv
+      app: space-inv-v3
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: space-inv
+        app: space-inv-v3
     spec:
       containers:
       - image: drehnstrom/space-invaders:v3.0
         name: space-invaders
-        resources: {}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: ".1"
+          limits:
+            memory: "256Mi"
+            cpu: ".2"
 status: {}
