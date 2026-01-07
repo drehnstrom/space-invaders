@@ -9,6 +9,7 @@ angular.module('appname')
     var enemy;
     var missile;
     var bomb;
+    var missileHitThisFrame = false;
     var explosionImage;
     var heroImage;
     var enemyImage;
@@ -45,7 +46,7 @@ angular.module('appname')
       };
       missile = {
         left: 0,
-        top: -150,
+        top: 500,
         speed: 20,
         image: "missile.svg"
       };
@@ -69,25 +70,25 @@ angular.module('appname')
       $http.get(hero.image)
       .then(function(response) {
         heroImage = response.data;
-        $('.hero').html(heroImage);
+        document.querySelector('.hero').innerHTML = heroImage;
       });
 
     $http.get(enemy.image)
       .then(function(response) {
         enemyImage = response.data;
-        $('.enemy').html(enemyImage);
+        document.querySelector('.enemy').innerHTML = enemyImage;
       });
 
     $http.get(missile.image)
       .then(function(response) {
         missileImage = response.data;
-        $('.missile').html(missileImage);
+        document.querySelector('.missile').innerHTML = missileImage;
       });
 
     $http.get(bomb.image)
       .then(function(response) {
         bombImage = response.data;
-        $('.bomb').html(bombImage);
+        document.querySelector('.bomb').innerHTML = bombImage;
       });
       
       $http.get('explosion.svg')
@@ -97,15 +98,15 @@ angular.module('appname')
     }
     
     function updateImages(){
-      $('.hero').html(heroImage);
-      $('.enemy').html(enemyImage);
-      $('.missile').html(missileImage);
-      $('.bomb').html(bombImage);
+      document.querySelector('.hero').innerHTML = heroImage;
+      document.querySelector('.enemy').innerHTML = enemyImage;
+      document.querySelector('.missile').innerHTML = missileImage;
+      document.querySelector('.bomb').innerHTML = bombImage;
       
     }
 
     $scope.showMissile = function() {
-      return (missile.top != -150);
+      return (missile.top < 500 && missile.top >= 0);
     };
 
     $scope.startGame = function() {
@@ -115,32 +116,82 @@ angular.module('appname')
       
       // Make sure the Images are correct
       updateImages();
-      resetScore();
       
       // Starts the loop to run the game. 
       // Promise object is used to stop the loop
       promise = $interval(function() {
         
+        // Reset hit tracking for this frame
+        missileHitThisFrame = false;
+
         // Move the hero  
         $scope.heroleft = hero.left + "px";
 
         // Move the enemy
-        if (enemy.left > 500 || enemy.left < 1) enemy.direction *= -1;
+        if (enemy.left > 700 || enemy.left < 1) enemy.direction *= -1;
         enemy.left = enemy.left + (enemy.speed * enemy.direction);
         $scope.enemyleft = enemy.left + "px";
 
-        // Move the missile
-        if (missile.top >= -150) {
+        // Check collisions BEFORE moving missile
+        // See if the missile hits the bomb
+        if (!missileHitThisFrame && missile.top <= 500 && missile.top >= -50 && !bomb.exploding &&
+            missile.left + 10 > bomb.left && missile.left < bomb.left + 50 && 
+            missile.top >= bomb.top && missile.top <= bomb.top + 50) {
+          // It's a hit
+          missileHitThisFrame = true;
+          $scope.score += 1;
+          bomb.rotation = 0;
+          bomb.top = 60;
+          bomb.left = enemy.left + 50;
+          missile.top = 500;
+        }
+
+        // See if the missile hits the enemy
+        if (!missileHitThisFrame && missile.top <= 500 && missile.top >= -50 && 
+            missile.left + 10 > enemy.left && missile.left < enemy.left + 100 && 
+            missile.top >= 10 && missile.top <= 110) {
+          // It's a hit
+          missileHitThisFrame = true;
+          $scope.score += 10;
+          missile.top = 500;
+          
+          // Show explosion effect on enemy
+          var enemyDiv = document.querySelector('.enemy');
+          var savedEnemy = enemyDiv.innerHTML;
+          enemyDiv.innerHTML = explosionImage;
+          
+          $timeout(function(){
+            enemyDiv.innerHTML = savedEnemy;
+          }, 200);
+        }
+
+        // Move the missile AFTER checking collisions
+        if (missile.top <= 500 && missile.top >= -50) {
           missile.top = missile.top - missile.speed;
-          if (missile.top <= -150) missile.top = -150;
+          if (missile.top < -50) missile.top = 500;
           $scope.missiletop = missile.top + "px";
           $scope.missileleft = missile.left + "px";
         }
 
         // Move the Bomb
-        if (bomb.top != 220 && ! bomb.exploding) {
+        if (bomb.top < 450 && ! bomb.exploding) {
           bomb.top = bomb.top + bomb.speed;
-          if (bomb.top >= 220) bomb.top = 220;
+          
+          // Check if bomb hit the ground
+          if (bomb.top >= 450) {
+            bomb.top = 450;
+            bomb.exploding = true;
+            document.querySelector('.bomb').innerHTML = explosionImage;
+            
+            $timeout.cancel(timeoutPromise);
+            timeoutPromise = $timeout(function(){
+              bomb.rotation = 0;
+              bomb.top = 60;
+              bomb.left = enemy.left + 50;
+              bomb.exploding = false;
+              document.querySelector('.bomb').innerHTML = bombImage;
+            }, 200);
+          }
 
           bomb.rotation = bomb.rotation + 6;
           if (bomb.rotation >= 360) bomb.rotation = 0;
@@ -155,61 +206,84 @@ angular.module('appname')
         }
         else {
           bomb.rotation = 0;
-          bomb.top = -100;
+          bomb.top = 60;  // Just below the enemy (enemy at 10px + enemy height 100px)
           bomb.left = enemy.left + 50;
         }
 
         // See if the bomb hits the hero
-        if (!bomb.exploding && bomb.left > hero.left && bomb.left < hero.left + 100 && bomb.top > 180) {
+        if (!bomb.exploding && bomb.left > hero.left && bomb.left < hero.left + 100 && bomb.top > 340 && bomb.top < 450) {
           // It's a hit
           $scope.lives -= 1;
           
           bomb.exploding = true;
-          $('.bomb').html(explosionImage);
+          document.querySelector('.bomb').innerHTML = explosionImage;
           
           $timeout.cancel(timeoutPromise);  //does nothing, if timeout alrdy done
           timeoutPromise = $timeout(function(){   
-            $('.bomb').html(explosionImage);//Set timeout
-              bomb.top = 220;
+            document.querySelector('.bomb').innerHTML = explosionImage;//Set timeout
+              bomb.rotation = 0;
+              bomb.top = 60;
+              bomb.left = enemy.left + 50;
               bomb.exploding = false;
-              $('.bomb').html(bombImage);
+              document.querySelector('.bomb').innerHTML = bombImage;
           }, 200);
         
         }
 
         // See if the missile hits the bomb
-        if (missile.left > bomb.left && missile.left < bomb.left + 50 && missile.top < bomb.top + 50 && missile.top > bomb.top) {
+        if (!missileHitThisFrame && missile.top >= 0 && missile.top < 500 && !bomb.exploding &&
+            missile.left + 10 > bomb.left && missile.left < bomb.left + 50 && 
+            missile.top >= bomb.top && missile.top <= bomb.top + 50) {
           // It's a hit
+          missileHitThisFrame = true;
           $scope.score += 1;
-          bomb.top = 220;
+          bomb.rotation = 0;
+          bomb.top = 60;
+          bomb.left = enemy.left + 50;
+          missile.top = 500;
         }
 
         // See if the missile hits the enemy
-        if (missile.left > enemy.left && missile.left < enemy.left + 100 && missile.top < -100 && missile.top != -150) {
+        if (missile.top >= 0 && missile.top < 500 && 
+            missile.left + 10 > enemy.left && missile.left < enemy.left + 100 && 
+            missile.top >= 10 && missile.top <= 110) {
           // It's a hit
           $scope.score += 10;
-          missile.top = -150;
+          missile.top = 500;
+          
+          // Show explosion effect on enemy
+          var enemyDiv = document.querySelector('.enemy');
+          var savedEnemy = enemyDiv.innerHTML;
+          enemyDiv.innerHTML = explosionImage;
+          
+          $timeout(function(){
+            enemyDiv.innerHTML = savedEnemy;
+          }, 200);
         }
 
       }, 25);
     }
 
     $scope.$watch("lives", function(newValue) {
-      if (newValue <= 0) {
+      if (newValue <= 0 && promise) {
         $interval.cancel(promise);
-        $('.hero').html(explosionImage);
+        promise = null;
+        document.querySelector('.hero').innerHTML = explosionImage;
       }
     });
 
     $scope.$watch("score", function(newValue) {
-      if (newValue >= winningScore) {
+      if (newValue >= winningScore && promise) {
         $interval.cancel(promise);
-        $('.enemy').html(explosionImage);
+        promise = null;
+        document.querySelector('.enemy').innerHTML = explosionImage;
       }
     });
 
     $scope.pauseGame = function() {
-      $interval.cancel(promise);
+      if (promise) {
+        $interval.cancel(promise);
+      }
     }
 
     $scope.resetGame = function() {
@@ -224,7 +298,7 @@ angular.module('appname')
           break;
         case 39: // Right
           hero.left = hero.left + hero.speed;
-          if (hero.left > 500) hero.left = 500;
+          if (hero.left > 700) hero.left = 700;
           break;
         case 32: // Space
           missile.left = hero.left + 50;

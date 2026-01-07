@@ -1,35 +1,186 @@
-/* Put your css in here */
-
-/*
-.well{
-  background-image: linear-gradient(to bottom, #eeeeee 0%,#eda1a1 100%);
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-*/
 
-/* Sticky footer styles
--------------------------------------------------- */
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
 
-.footer {
-  position: absolute;
-  bottom: 0;
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navigation bar */
+.navbar {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white !important;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  opacity: 0.8;
+}
+
+/* Main content takes up remaining space */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Game wrapper */
+.game-wrapper {
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-
-.container .text-muted {
-  margin: 20px 0;
+/* Game board */
+.gameboard {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  background-color: #333;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.80) 0%, rgba(5,60,145,0.40) 100%);
+  border: 2px solid #555;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
-.item img{
-  height:200px !important;
-  margin:auto;
- 
+/* Game objects */
+.hero {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.enemy {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.missile {
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.bomb {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Controls section */
+.score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+}
+
+.score h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #3498db;
+  color: white;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.btn-warning {
+  background-color: #f39c12;
+}
+
+.btn-warning:hover {
+  background-color: #d68910;
+}
+
+/* Footer */
+footer {
+  background-color: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+  border-top: 2px solid #1a252f;
+}
+
+footer p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .controls {
+    width: 100%;
+    max-width: 600px;
+  }
 }
