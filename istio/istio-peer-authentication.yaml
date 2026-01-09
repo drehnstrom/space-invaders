@@ -2,7 +2,7 @@ apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
   name: example-policy
-  namespace: default
+  # namespace: default  <-- Removed to allow application to current context namespace
 spec:
   mtls:
     mode: STRICT
