@@ -118,7 +118,7 @@ kubectl get service -n si-istio asm-ingressgateway
 
 ## Delete resources
 ```bash
-kubectl delete -f ./ -n si-istio
+kubectl delete -f ./istio/ -n si-istio
 ```
 
 ## Delete Cluster
