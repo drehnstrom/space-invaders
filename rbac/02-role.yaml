@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: si-istio
+  name: space-invaders-viewer
+rules:
+# 1. Allow reading standard Kubernetes resources (Pods, Services, Deployments, Logs)
+- apiGroups: ["", "apps"]
+  resources: ["pods", "pods/log", "services", "deployments"]
+  verbs: ["get", "watch", "list"]
+
+# 2. Allow reading Istio Custom Resources (to debug traffic splitting!)
+- apiGroups: ["networking.istio.io"]
+  resources: ["virtualservices", "destinationrules", "gateways"]
+  verbs: ["get", "watch", "list"]

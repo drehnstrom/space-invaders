@@ -18,7 +18,7 @@ spec:
         app: space-inv-v3
     spec:
       containers:
-      - image: drehnstrom/space-invaders:v3.0
+      - image: drehnstrom/space-invaders:v3.1
         name: space-invaders
         resources:
           requests:

@@ -55,7 +55,7 @@ angular.module('appname')
         top: 500,
         speed: 5,
         rotation: 0,
-        image: "bomb.svg",
+        image: "puppy.svg",
         exploding:false
       };
       
@@ -67,31 +67,34 @@ angular.module('appname')
     }
     
     function getImageURLs(){
-      $http.get(hero.image)
+      // Generate a timestamp to prevent caching
+      var timestamp = new Date().getTime();
+
+      $http.get(hero.image + "?t=" + timestamp)
       .then(function(response) {
         heroImage = response.data;
         document.querySelector('.hero').innerHTML = heroImage;
       });
 
-    $http.get(enemy.image)
+    $http.get(enemy.image + "?t=" + timestamp)
       .then(function(response) {
         enemyImage = response.data;
         document.querySelector('.enemy').innerHTML = enemyImage;
       });
 
-    $http.get(missile.image)
+    $http.get(missile.image + "?t=" + timestamp)
       .then(function(response) {
         missileImage = response.data;
         document.querySelector('.missile').innerHTML = missileImage;
       });
 
-    $http.get(bomb.image)
+    $http.get(bomb.image + "?t=" + timestamp)
       .then(function(response) {
         bombImage = response.data;
         document.querySelector('.bomb').innerHTML = bombImage;
       });
       
-      $http.get('explosion.svg')
+      $http.get('explosion.svg' + "?t=" + timestamp)
       .then(function(response) {
          explosionImage = response.data;
       });

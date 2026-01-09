@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asm-ingressgateway
+  labels:
+    istio: ingressgateway
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  template:
+    metadata:
+      annotations:
+        # This is needed for the sidecar injector to configure the proxy as a gateway
+        inject.istio.io/templates: gateway
+      labels:
+        istio: ingressgateway
+    spec:
+      containers:
+      - name: istio-proxy
+        image: auto # The image will automatically be injected
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asm-ingressgateway
+  labels:
+    istio: ingressgateway
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8443
+  selector:
+    istio: ingressgateway
+  type: LoadBalancer
