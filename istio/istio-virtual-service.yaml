@@ -29,10 +29,10 @@ spec:
         subset: v1                     # Subset defined in the Destination Rule
         port:
           number: 80
-      weight: 75                       # Canary example - Send 75% of the traffic to v1
+      weight: 0                      # Canary example - Send 75% of the traffic to v1
     - destination:
         host: space-invaders-service   # The Kubernetes service name
         subset: v3
         port:
           number: 80
-      weight: 25
+      weight: 100
