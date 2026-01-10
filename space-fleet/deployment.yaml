@@ -5,7 +5,7 @@ metadata:
   namespace: space-fleet
   labels:
     app: space-invaders
-    version: v1
+    version: v3
 spec:
   replicas: 3
   selector:
@@ -15,11 +15,11 @@ spec:
     metadata:
       labels:
         app: space-invaders
-        version: v1
+        version: v3
     spec:
       containers:
       - name: space-invaders
-        image: drehnstrom/space-invaders:v1.0
+        image: drehnstrom/space-invaders:v3.0
         ports:
         - containerPort: 80
         resources:
