@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: space-invaders
+  namespace: space-fleet
+  labels:
+    app: space-invaders
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: space-invaders
+  template:
+    metadata:
+      labels:
+        app: space-invaders
+        version: v1
+    spec:
+      containers:
+      - name: space-invaders
+        image: drehnstrom/space-invaders:v1.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
