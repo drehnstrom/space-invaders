@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: space-invaders
-        image: drehnstrom/space-invaders:v1.0
+        image: drehnstrom/space-invaders:v3.0
         ports:
         - containerPort: 80
         resources:
